@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -133,18 +132,21 @@ public class UI extends JFrame implements ActionListener{
 		        // gestione errore in chiusura
 		    }
 		}
-//		if (e.getSource() == btnInserisciPrenotazione){
-//			UIPrenotazione uip = new UIPrenotazione(this.connection, this.statement);
-//			uip.setVisible(true);
-//		}
-//		if (e.getSource() == btnInserisciUtente){
-//			UIUtente uiu = new UIUtente(this.connection, this.statement);
-//			uiu.setVisible(true);
-//		}
-//		if (e.getSource() == btnInserisciSpiaggia){
-//			UISpiaggia uis = new UISpiaggia(this.connection, this.statement);
-//			uis.setVisible(true);
-//		}
+		if (e.getSource() == btnInserisciPrenotazione){
+			UIPrenotazione uip = new UIPrenotazione(this.connection, this.statement);
+			uip.setVisible(true);
+			this.setVisible(false);
+		}
+		else if (e.getSource() == btnInserisciUtente){
+			UIUtente uiu = new UIUtente(this.connection, this.statement);
+			uiu.setVisible(true);
+			this.setVisible(false);
+		}
+		else if (e.getSource() == btnInserisciSpiaggia){
+			UISpiaggia uis = new UISpiaggia(this.connection, this.statement);
+			uis.setVisible(true);
+			this.setVisible(false);
+		}
 		
 	}
 	

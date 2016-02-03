@@ -83,9 +83,9 @@ public class Prenotazione {
 	@Override
 	public String toString(){
 		return "La prenotazione con ID = " + this.getID() +
-				" che ha come numero ombrellone " + this.getNumeroOmbrellone() +
-				" ha un prezzo di €" + this.getPrezzoReale() +
-				" e' stata effettuata da " + this.getUsernameUtente() +
+				" , che ha come numero ombrellone " + this.getNumeroOmbrellone() +
+				", ha un prezzo di €" + this.getPrezzoReale() +
+				" ed e' stata effettuata da " + this.getUsernameUtente() +
 				" dal " + this.getDal() + " al " + this.getAl() +
 				". ID listino = " + this.getIdListino();
 	}

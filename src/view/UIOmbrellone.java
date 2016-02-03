@@ -171,9 +171,6 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 					list.add(new Ombrellone(Integer.parseInt(result.getString("Numero")),
 					result.getString("Posizione"),
 					Integer.parseInt(result.getString("ID_Spiaggia"))));
-//	    		result_txtArea.append(result.getString("Numero") + " " + 
-//	    						result.getString("Posizione") + " " + 
-//	    						result.getString("ID_Spiaggia"));
 				}
 				result_txtArea.setText("");
 				for (Ombrellone attuale : list){
@@ -184,8 +181,6 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 				//SCRIVO I RISULTATI SU UN FILE
 				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingOmbrelloni.txt")) {
 					file.write(obj.toJSONString());
-//				System.out.println("Successfully Copied JSON Object to File...");
-//				System.out.println("\nJSON Object: " + obj);
 				}
 				this.pack();
 			}  catch (SQLException e) {
