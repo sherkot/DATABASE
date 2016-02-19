@@ -1,0 +1,317 @@
+[33mcommit 47cdd25bb7f75cbc24386f6c62e44798f2e46068[m
+Author: Marco Sisca <marxs.94@libero.it>
+Date:   Fri Feb 19 13:26:22 2016 +0100
+
+    first commit
+
+[1mdiff --git a/README.md b/README.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..56d17e1[m
+[1m--- /dev/null[m
+[1m+++ b/README.md[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32m"# DATABASE"[m[41m [m
+[1mdiff --git a/bin/model/Main.class b/bin/model/Main.class[m
+[1mindex 762689b..64e4a42 100644[m
+Binary files a/bin/model/Main.class and b/bin/model/Main.class differ
+[1mdiff --git a/bin/model/cconfig.properties b/bin/model/cconfig.properties[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8853646[m
+[1m--- /dev/null[m
+[1m+++ b/bin/model/cconfig.properties[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mjdbcDriver = com.mysql.jdbc.Driver[m
+[32m+[m[32mjdbcUrl = jdbc:mysql://localhost:3306/grandhotel[m
+[32m+[m[32mjdbcUsername = sherkot[m
+[32m+[m[32mjdbcPassword = MR654cl5993[m
+\ No newline at end of file[m
+[1mdiff --git a/bin/model/config.properties b/bin/model/config.properties[m
+[1mindex 8853646..1b58f5d 100644[m
+[1m--- a/bin/model/config.properties[m
+[1m+++ b/bin/model/config.properties[m
+[36m@@ -1,4 +1,4 @@[m
+ jdbcDriver = com.mysql.jdbc.Driver[m
+[31m-jdbcUrl = jdbc:mysql://localhost:3306/grandhotel[m
+[31m-jdbcUsername = sherkot[m
+[32m+[m[32mjdbcUrl = jdbc:mysql://94.141.21.12:3306/heludvsz_grandhotel[m
+[32m+[m[32mjdbcUsername = heludvsz_marxs[m
+ jdbcPassword = MR654cl5993[m
+\ No newline at end of file[m
+[1mdiff --git a/bin/view/UIListino.class b/bin/view/UIListino.class[m
+[1mindex b8112e9..d1bb339 100644[m
+Binary files a/bin/view/UIListino.class and b/bin/view/UIListino.class differ
+[1mdiff --git a/bin/view/UIOmbrellone.class b/bin/view/UIOmbrellone.class[m
+[1mindex 461518b..d0d2cc3 100644[m
+Binary files a/bin/view/UIOmbrellone.class and b/bin/view/UIOmbrellone.class differ
+[1mdiff --git a/bin/view/UIPrenotazione.class b/bin/view/UIPrenotazione.class[m
+[1mindex b2b6bf9..f5df07e 100644[m
+Binary files a/bin/view/UIPrenotazione.class and b/bin/view/UIPrenotazione.class differ
+[1mdiff --git a/bin/view/UISpiaggia.class b/bin/view/UISpiaggia.class[m
+[1mindex 8526294..662540a 100644[m
+Binary files a/bin/view/UISpiaggia.class and b/bin/view/UISpiaggia.class differ
+[1mdiff --git a/bin/view/UIUtente.class b/bin/view/UIUtente.class[m
+[1mindex df6225a..769dd0e 100644[m
+Binary files a/bin/view/UIUtente.class and b/bin/view/UIUtente.class differ
+[1mdiff --git a/parsingOmbrelloni.txt b/parsingOmbrelloni.txt[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3943d5e[m
+[1m--- /dev/null[m
+[1m+++ b/parsingOmbrelloni.txt[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32m{"Autore":"Marco Sisca","Ombrelloni":["Ombrellone numero 10 situato in seconda fila della spiaggia 123","Ombrellone numero 13 situato in prima fila della spiaggia 100","Ombrellone numero 15 situato in seconda fila della spiaggia 123","Ombrellone numero 16 situato in seconda fila della spiaggia 1","Ombrellone numero 17 situato in seconda fila della spiaggia 123","Ombrellone numero 25 situato in prima fila della spiaggia 123","Ombrellone numero 101 situato in seconda fila della spiaggia 123","Ombrellone numero 105 situato in seconda fila della spiaggia 123","Ombrellone numero 106 situato in seconda fila della spiaggia 123","Ombrellone numero 107 situato in seconda fila della spiaggia 1","Ombrellone numero 108 situato in seconda fila della spiaggia 2","Ombrellone numero 109 situato in seconda fila della spiaggia 2","Ombrellone numero 130 situato in seconda fila della spiaggia 123","Ombrellone numero 131 situato in seconda fila della spiaggia 2","Ombrellone numero 132 situato in seconda fila della spiaggia 8","Ombrellone numero 133 situato in prima fila della spiaggia 123","Ombrellone numero 134 situato in prima fila della spiaggia 123","Ombrellone numero 150 situato in terza fila della spiaggia 123","Ombrellone numero 369 situato in quinta fila della spiaggia 20","Ombrellone numero 555 situato in quarta fila della spiaggia 12","Ombrellone numero 600 situato in prima fila della spiaggia 123","Ombrellone numero 601 situato in prima fila della spiaggia 123","Ombrellone numero 654 situato in fdggq della spiaggia 234","Ombrellone numero 695 situato in terza fila della spiaggia 123","Ombrellone numero 2334 situato in quarta fila della spiaggia 123","Ombrellone numero 6001 situato in prima fila della spiaggia 123"],"Creato il":2016-02-07}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/model/Main.java b/src/model/Main.java[m
+[1mindex 778e4b2..0e0f590 100644[m
+[1m--- a/src/model/Main.java[m
+[1m+++ b/src/model/Main.java[m
+[36m@@ -15,7 +15,7 @@[m [mpublic class Main {[m
+ 		try {[m
+ 			Properties p = new Properties();[m
+ 			//nel file di properties ci sono tutti i dati che servono per collegarmi al DB[m
+[31m-			p.load(new FileInputStream("C:\\Users\\marxs.94\\JAVA-MYSQL\\DATABASE\\src\\model\\config.properties")); [m
+[32m+[m			[32mp.load(new FileInputStream("C:\\Users\\marxs.94\\JAVA-MYSQL\\DATABASE\\src\\model\\cconfig.properties"));[m[41m [m
+ 			String driver = p.getProperty("jdbcDriver");[m
+ 			Class.forName(driver);[m
+ 			String url = p.getProperty("jdbcUrl");[m
+[1mdiff --git a/src/model/cconfig.properties b/src/model/cconfig.properties[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8853646[m
+[1m--- /dev/null[m
+[1m+++ b/src/model/cconfig.properties[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mjdbcDriver = com.mysql.jdbc.Driver[m
+[32m+[m[32mjdbcUrl = jdbc:mysql://localhost:3306/grandhotel[m
+[32m+[m[32mjdbcUsername = sherkot[m
+[32m+[m[32mjdbcPassword = MR654cl5993[m
+\ No newline at end of file[m
+[1mdiff --git a/src/model/config.properties b/src/model/config.properties[m
+[1mindex 8853646..1b58f5d 100644[m
+[1m--- a/src/model/config.properties[m
+[1m+++ b/src/model/config.properties[m
+[36m@@ -1,4 +1,4 @@[m
+ jdbcDriver = com.mysql.jdbc.Driver[m
+[31m-jdbcUrl = jdbc:mysql://localhost:3306/grandhotel[m
+[31m-jdbcUsername = sherkot[m
+[32m+[m[32mjdbcUrl = jdbc:mysql://94.141.21.12:3306/heludvsz_grandhotel[m
+[32m+[m[32mjdbcUsername = heludvsz_marxs[m
+ jdbcPassword = MR654cl5993[m
+\ No newline at end of file[m
+[1mdiff --git a/src/view/UIListino.java b/src/view/UIListino.java[m
+[1mindex ed9d216..00a2a5b 100644[m
+[1m--- a/src/view/UIListino.java[m
+[1m+++ b/src/view/UIListino.java[m
+[36m@@ -280,7 +280,7 @@[m [mpublic class UIListino extends JFrame implements ActionListener{[m
+ 				obj.put("Listini",listino);[m
+ 			[m
+ 				//SCRIVO I RISULTATI SU UN FILE[m
+[31m-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingListino.txt")) {[m
+[32m+[m				[32mtry (FileWriter file = new FileWriter("parsingListino.txt")) {[m
+ 					file.write(obj.toJSONString());[m
+ 				}[m
+ 				this.pack();[m
+[1mdiff --git a/src/view/UIOmbrellone.java b/src/view/UIOmbrellone.java[m
+[1mindex ce5fcb8..934730a 100644[m
+[1m--- a/src/view/UIOmbrellone.java[m
+[1m+++ b/src/view/UIOmbrellone.java[m
+[36m@@ -30,6 +30,7 @@[m [mimport org.json.simple.JSONArray;[m
+ import org.json.simple.JSONObject;[m
+ [m
+ import model.Ombrellone;[m
+[32m+[m[32mimport java.awt.Color;[m
+ [m
+ public class UIOmbrellone extends JFrame implements ActionListener {[m
+ [m
+[36m@@ -44,13 +45,16 @@[m [mpublic class UIOmbrellone extends JFrame implements ActionListener {[m
+ 	private Statement statement;[m
+ 	private ResultSet result = null;[m
+ 	private JButton indietro_btn;[m
+[32m+[m	[32mprivate JButton visualizza_btn;[m
+[32m+[m	[32mprivate JSONObject obj = new JSONObject();[m
+[32m+[m	[32mprivate JSONArray ombrelloni = new JSONArray();[m
+ [m
+ [m
+ 	public UIOmbrellone(Connection connection, Statement statement) {[m
+ 		this.connection = connection;[m
+ 		this.statement = statement;[m
+ 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);[m
+[31m-		setBounds(100, 100, 450, 300);[m
+[32m+[m		[32msetBounds(100, 100, 450, 326);[m
+ 		contentPane = new JPanel();[m
+ 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));[m
+ 		setContentPane(contentPane);[m
+[36m@@ -60,9 +64,9 @@[m [mpublic class UIOmbrellone extends JFrame implements ActionListener {[m
+ 		contentPane.add(panel, BorderLayout.CENTER);[m
+ 		GridBagLayout gbl_panel = new GridBagLayout();[m
+ 		gbl_panel.columnWidths = new int[]{105, 46, 0};[m
+[31m-		gbl_panel.rowHeights = new int[]{14, 0, 0, 0, 0, 0, 0, 0, 0};[m
+[32m+[m		[32mgbl_panel.rowHeights = new int[]{14, 0, 0, 0, 0, 0, 0, 0, 0, 0};[m
+ 		gbl_panel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};[m
+[31m-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};[m
+[32m+[m		[32mgbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};[m
+ 		panel.setLayout(gbl_panel);[m
+ 		[m
+ 		JLabel numero_lbl = new JLabel("Numero");[m
+[36m@@ -117,6 +121,8 @@[m [mpublic class UIOmbrellone extends JFrame implements ActionListener {[m
+ 		idSpiaggia_txt.setColumns(10);[m
+ 		[m
+ 		result_txtArea = new JTextArea();[m
+[32m+[m		[32mresult_txtArea.setEditable(false);[m
+[32m+[m		[32mresult_txtArea.setForeground(Color.RED);[m
+ 		GridBagConstraints gbc_result_txtArea = new GridBagConstraints();[m
+ 		gbc_result_txtArea.insets = new Insets(0, 0, 5, 0);[m
+ 		gbc_result_txtArea.gridx = 1;[m
+[36m@@ -126,11 +132,19 @@[m [mpublic class UIOmbrellone extends JFrame implements ActionListener {[m
+ 		indietro_btn = new JButton("<-");[m
+ 		indietro_btn.addActionListener(this);[m
+ 		GridBagConstraints gbc_indietro_btn = new GridBagConstraints();[m
+[31m-		gbc_indietro_btn.insets = new Insets(0, 0, 0, 5);[m
+[32m+[m		[32mgbc_indietro_btn.insets = new Insets(0, 0, 5, 5);[m
+ 		gbc_indietro_btn.gridx = 0;[m
+ 		gbc_indietro_btn.gridy = 7;[m
+ 		panel.add(indietro_btn, gbc_indietro_btn);[m
+ 		[m
+[32m+[m		[32mvisualizza_btn = new JButton("Visualizza tutti i dati");[m
+[32m+[m		[32mvisualizza_btn.addActionListener(this);[m
+[32m+[m		[32mGridBagConstraints gbc_visualizza_btn = new GridBagConstraints();[m
+[32m+[m		[32mgbc_visualizza_btn.insets = new Insets(0, 0, 0, 5);[m
+[32m+[m		[32mgbc_visualizza_btn.gridx = 0;[m
+[32m+[m		[32mgbc_visualizza_btn.gridy = 8;[m
+[32m+[m		[32mpanel.add(visualizza_btn, gbc_visualizza_btn);[m
+[32m+[m[41m		[m
+ 		ombrellone_btn = new JButton("Inserisci Ombrellone");[m
+ 		ombrellone_btn.addActionListener(this);[m
+ 		contentPane.add(ombrellone_btn, BorderLayout.SOUTH);[m
+[36m@@ -144,50 +158,54 @@[m [mpublic class UIOmbrellone extends JFrame implements ActionListener {[m
+ 			UI mainUI = new UI(this.connection,this.statement);[m
+ 			mainUI.setVisible(true);[m
+ 			this.setVisible(false);[m
+[31m-		}[m
+[31m-		else {[m
+[31m-			try{[m
+[31m-				JSONObject obj = new JSONObject();[m
+[31m-				JSONArray ombrelloni = new JSONArray();[m
+[31m-				obj.put("Autore", "Marco Sisca");[m
+[31m-				obj.put("Creato il", LocalDate.now());[m
+[31m-		[m
+[31m-				Ombrellone o = new Ombrellone(Integer.parseInt(numero_txt.getText()),[m
+[31m-										posizione_txt.getText(),[m
+[31m-										Integer.parseInt(idSpiaggia_txt.getText()));[m
+[31m-[m
+[31m-				//INSERIMENTO NELLA TABELLA OMBRELLONE[m
+[31m-				String insertOnOmbrellone = String.format("INSERT INTO ombrelloni VALUES (%s,'%s',%s)",o.getNumero(),[m
+[31m-	    																						o.getPosizione(),[m
+[31m-	    																						o.getIdSpiaggia());[m
+[31m-				this.statement.executeUpdate(insertOnOmbrellone);[m
+[31m-				//INTERROGAZIONE SULLA TABELLA OMBRELLONE[m
+[31m-				this.statement = this.connection.createStatement();[m
+[31m-				String queryOnOmbrellone = "SELECT * FROM ombrelloni";[m
+[31m-				result = this.statement.executeQuery(queryOnOmbrellone);[m
+[31m-				List<Ombrellone> list = new ArrayList<>();[m
+[31m-	  [m
+[31m-				while (result.next()){[m
+[31m-					list.add(new Ombrellone(Integer.parseInt(result.getString("Numero")),[m
+[31m-					result.getString("Posizione"),[m
+[31m-					Integer.parseInt(result.getString("ID_Spiaggia"))));[m
+[31m-				}[m
+[31m-				result_txtArea.setText("");[m
+[31m-				for (Ombrellone attuale : list){[m
+[31m-					result_txtArea.append(attuale.toString() + "\n");[m
+[31m-					ombrelloni.add(attuale.toString());[m
+[31m-				}[m
+[31m-				obj.put("Ombrelloni", ombrelloni);[m
+[31m-				//SCRIVO I RISULTATI SU UN FILE[m
+[31m-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingOmbrelloni.txt")) {[m
+[31m-					file.write(obj.toJSONString());[m
+[31m-				}[m
+[31m-				this.pack();[m
+[31m-			}  catch (SQLException e) {[m
+[32m+[m		[32m} else if(arg0.getSource() == visualizza_btn){[m
+[32m+[m			[32mtry {[m
+[32m+[m			[32mthis.statement = this.connection.createStatement();[m
+[32m+[m			[32mString querySelect = "SELECT * FROM ombrelloni";[m
+[32m+[m			[32mresult = this.statement.executeQuery(querySelect);[m
+[32m+[m			[32mList<Ombrellone> list = new ArrayList<>();[m
+[32m+[m[41m			  [m
+[32m+[m			[32mwhile (result.next()){[m
+[32m+[m				[32mlist.add(new Ombrellone(Integer.parseInt(result.getString("Numero")),[m
+[32m+[m				[32mresult.getString("Posizione"),[m
+[32m+[m				[32mInteger.parseInt(result.getString("ID_Spiaggia"))));[m
+[32m+[m			[32m}[m
+[32m+[m			[32mresult_txtArea.setText("");[m
+[32m+[m			[32mfor (Ombrellone attuale : list){[m
+[32m+[m				[32mresult_txtArea.append(attuale.toString() + "\n");[m
+[32m+[m				[32mombrelloni.add(attuale.toString());[m
+[32m+[m			[32m}[m
+[32m+[m			[32mthis.pack();[m
+[32m+[m			[32m}catch (SQLException e) {[m
+ 				e.printStackTrace();[m
+ 			} catch (Exception e) {[m
+ 				System.out.println(e.getMessage());[m
+ 			}[m
+ 		}[m
+[32m+[m				[32melse {[m
+[32m+[m					[32mtry{[m
+[32m+[m						[32mobj.put("Autore", "Marco Sisca");[m
+[32m+[m						[32mobj.put("Creato il", LocalDate.now());[m
+[32m+[m						[32mOmbrellone o = new Ombrellone(Integer.parseInt(numero_txt.getText()),[m
+[32m+[m																		[32mposizione_txt.getText(),[m
+[32m+[m																		[32mInteger.parseInt(idSpiaggia_txt.getText()));[m
+[32m+[m						[32m//INSERIMENTO NELLA TABELLA OMBRELLONE[m
+[32m+[m						[32mString insertOnOmbrellone = String.format("INSERT INTO ombrelloni VALUES (%s,'%s',%s)",o.getNumero(),[m
+[32m+[m	[41m    [m																										[32mo.getPosizione(),[m
+[32m+[m	[41m    [m																										[32mo.getIdSpiaggia());[m
+[32m+[m						[32mthis.statement.executeUpdate(insertOnOmbrellone);[m
+[32m+[m						[32mvisualizza_btn.doClick();[m
+[32m+[m						[32mobj.put("Ombrelloni", ombrelloni);[m
+[32m+[m						[32m//SCRIVO I RISULTATI SU UN FILE[m
+[32m+[m						[32mtry (FileWriter file = new FileWriter("parsingOmbrelloni.txt")) {[m
+[32m+[m							[32mfile.write(obj.toJSONString());[m
+[32m+[m						[32m}[m
+[32m+[m						[32mthis.pack();[m
+[32m+[m					[32m}  catch (SQLException e) {[m
+[32m+[m						[32me.printStackTrace();[m
+[32m+[m					[32m} catch (Exception e) {[m
+[32m+[m						[32mSystem.out.println(e.getMessage());[m
+[32m+[m					[32m}[m
+[32m+[m				[32m}[m
+ 	}[m
+ }[m
+[1mdiff --git a/src/view/UIPrenotazione.java b/src/view/UIPrenotazione.java[m
+[1mindex 0075c4b..fa5975a 100644[m
+[1m--- a/src/view/UIPrenotazione.java[m
+[1m+++ b/src/view/UIPrenotazione.java[m
+[36m@@ -287,7 +287,7 @@[m [mpublic class UIPrenotazione extends JFrame implements ActionListener {[m
+ 				obj.put("Prenotazioni",prenotazioni);[m
+ 				[m
+ 				//SCRIVO I RISULTATI SU UN FILE[m
+[31m-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingPrenotazioni.txt")) {[m
+[32m+[m				[32mtry (FileWriter file = new FileWriter("parsingPrenotazioni.txt")) {[m
+ 					file.write(obj.toJSONString());[m
+ 				}[m
+ 				this.pack();[m
+[1mdiff --git a/src/view/UISpiaggia.java b/src/view/UISpiaggia.java[m
+[1mindex a1221f0..94f6b1c 100644[m
+[1m--- a/src/view/UISpiaggia.java[m
+[1m+++ b/src/view/UISpiaggia.java[m
+[36m@@ -210,7 +210,7 @@[m [mpublic class UISpiaggia extends JFrame implements ActionListener {[m
+ 				}[m
+ 				obj.put("Spiagge", spiagge);[m
+ 				//SCRIVO I RISULTATI SU UN FILE[m
+[31m-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingSpiagge.txt")) {[m
+[32m+[m				[32mtry (FileWriter file = new FileWriter("parsingSpiagge.txt")) {[m
+ 					file.write(obj.toJSONString());[m
+ 				}[m
+ 				this.pack();[m
+[1mdiff --git a/src/view/UIUtente.java b/src/view/UIUtente.java[m
+[1mindex e893400..fb7e0df 100644[m
+[1m--- a/src/view/UIUtente.java[m
+[1m+++ b/src/view/UIUtente.java[m
+[36m@@ -200,7 +200,7 @@[m [mpublic class UIUtente extends JFrame implements ActionListener{[m
+ 				}[m
+ 				obj.put("Utenti", utenti);[m
+ 				//SCRIVO I RISULTATI SU UN FILE[m
+[31m-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingUtenti.txt")) {[m
+[32m+[m				[32mtry (FileWriter file = new FileWriter("parsingUtenti.txt")) {[m
+ 					file.write(obj.toJSONString());[m
+ 				}[m
+ 				this.pack();[m

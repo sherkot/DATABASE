@@ -28,6 +28,7 @@ import model.Prenotazione;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 import java.awt.Font;
 
 public class UIPrenotazione extends JFrame implements ActionListener {
@@ -51,6 +52,9 @@ public class UIPrenotazione extends JFrame implements ActionListener {
 	private ResultSet result;
 	private JLabel label;
 	private JLabel label_1;
+	private JButton btnVisualizzaIDati;
+	private /*Dichiarazione oggetto json*/ JSONObject obj = new JSONObject();
+	private /*Dichiarazione array json*/ JSONArray prenotazioni = new JSONArray();
 	
 
 
@@ -58,7 +62,7 @@ public class UIPrenotazione extends JFrame implements ActionListener {
 		this.connection = connection;
 		this.statement = statement;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 445, 435);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -212,6 +216,11 @@ public class UIPrenotazione extends JFrame implements ActionListener {
 		
 		indietro_btn = new JButton("<-");
 		indietro_btn.addActionListener(this);
+		GridBagConstraints gbc_indietro_btn = new GridBagConstraints();
+		gbc_indietro_btn.insets = new Insets(0, 0, 5, 5);
+		gbc_indietro_btn.gridx = 0;
+		gbc_indietro_btn.gridy = 10;
+		panel.add(indietro_btn, gbc_indietro_btn);
 		
 		result_txtArea = new JTextArea();
 		GridBagConstraints gbc_result_txtArea = new GridBagConstraints();
@@ -220,11 +229,14 @@ public class UIPrenotazione extends JFrame implements ActionListener {
 		gbc_result_txtArea.gridx = 1;
 		gbc_result_txtArea.gridy = 10;
 		panel.add(result_txtArea, gbc_result_txtArea);
-		GridBagConstraints gbc_indietro_btn = new GridBagConstraints();
-		gbc_indietro_btn.insets = new Insets(0, 0, 0, 5);
-		gbc_indietro_btn.gridx = 0;
-		gbc_indietro_btn.gridy = 12;
-		panel.add(indietro_btn, gbc_indietro_btn);
+		
+		btnVisualizzaIDati = new JButton("Visualizza i dati");
+		GridBagConstraints gbc_btnVisualizzaIDati = new GridBagConstraints();
+		gbc_btnVisualizzaIDati.insets = new Insets(0, 0, 0, 5);
+		gbc_btnVisualizzaIDati.gridx = 0;
+		gbc_btnVisualizzaIDati.gridy = 12;
+		panel.add(btnVisualizzaIDati, gbc_btnVisualizzaIDati);
+		btnVisualizzaIDati.addActionListener(this);
 		
 		inserisci_btn = new JButton("Inserisci Prenotazione");
 		inserisci_btn.addActionListener(this);
@@ -240,11 +252,38 @@ public class UIPrenotazione extends JFrame implements ActionListener {
 			UI mainUI = new UI(this.connection,this.statement);
 			this.setVisible(false);
 			mainUI.setVisible(true);	
+		}else if(arg0.getSource() == btnVisualizzaIDati){
+			try {
+			this.statement = this.connection.createStatement();
+			String querySelect = "SELECT * FROM prenotazione";
+			result = this.statement.executeQuery(querySelect);
+			List<Prenotazione> list = new ArrayList<>();
+			  
+			//INTERROGAZIONE SULLA TABELLA LISTINO		
+			 while (result.next()){
+			    	list.add(new Prenotazione(Integer.parseInt(result.getString("ID")), 
+			    						LocalDate.parse(result.getString("Dal")), 
+			    						LocalDate.parse(result.getString("Al")), 
+			    						Integer.parseInt(result.getString("Prezzo_Reale")),
+			    						Integer.parseInt(result.getString("Numero_ombrellone")),
+			    						result.getString("Username_utente"),
+			    						Integer.parseInt(result.getString("ID_listino"))));
+			    }
+				result_txtArea.setText("");
+				for (Prenotazione attuale : list){
+					result_txtArea.append(attuale.toString() + "\n");
+					prenotazioni.add(attuale.toString());
+				}
+			this.pack();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		else {
 			try{
-			/*Dichiarazione oggetto json*/ JSONObject obj = new JSONObject();
-			/*Dichiarazione array json*/ 	JSONArray prenotazioni = new JSONArray();
+
 				Prenotazione pr = new Prenotazione(Integer.parseInt(ID_txt.getText()), 
 											LocalDate.parse(dal_txt.getText()),
 											LocalDate.parse(al_txt.getText()), 
@@ -266,21 +305,7 @@ public class UIPrenotazione extends JFrame implements ActionListener {
 			    statement = connection.createStatement();
 			    String queryOnPrenotazione = "SELECT * FROM prenotazione";
 			    result = statement.executeQuery(queryOnPrenotazione);
-			    List<Prenotazione> list = new ArrayList<>();
-			    while (result.next()){
-			    	list.add(new Prenotazione(Integer.parseInt(result.getString("ID")), 
-			    						LocalDate.parse(result.getString("Dal")), 
-			    						LocalDate.parse(result.getString("Al")), 
-			    						Integer.parseInt(result.getString("Prezzo_Reale")),
-			    						Integer.parseInt(result.getString("Numero_ombrellone")),
-			    						result.getString("Username_utente"),
-			    						Integer.parseInt(result.getString("ID_listino"))));
-			    }
-				result_txtArea.setText("");
-				for (Prenotazione attuale : list){
-					result_txtArea.append(attuale.toString() + "\n");
-					prenotazioni.add(attuale.toString());
-				}
+			    btnVisualizzaIDati.doClick();
 				obj.put("Nome", "Prova JSON");
 				obj.put("Creato da", "Marco Sisca");
 				obj.put("Creato il", LocalDate.now());

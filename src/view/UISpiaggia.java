@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+
 import model.Spiaggia;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 import javax.swing.JTextArea;
 
 public class UISpiaggia extends JFrame implements ActionListener {
@@ -44,12 +46,15 @@ public class UISpiaggia extends JFrame implements ActionListener {
 	private Statement statement;
 	private ResultSet result;
 	private JTextArea result_txtArea;
+	private JButton btnVisualizzaIDati;
+	private	JSONObject obj = new JSONObject();
+	private JSONArray spiagge = new JSONArray();
 	
 	public UISpiaggia(Connection connection, Statement statement) {
 		this.connection = connection;
 		this.statement = statement;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 468, 339);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -59,9 +64,9 @@ public class UISpiaggia extends JFrame implements ActionListener {
 		contentPane.add(panel, BorderLayout.WEST);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{91, 351, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JLabel id_lbl = new JLabel("ID");
@@ -155,10 +160,18 @@ public class UISpiaggia extends JFrame implements ActionListener {
 		indietro_btn = new JButton("<-");
 		indietro_btn.addActionListener(this);
 		GridBagConstraints gbc_indietro_btn = new GridBagConstraints();
-		gbc_indietro_btn.insets = new Insets(0, 0, 0, 5);
+		gbc_indietro_btn.insets = new Insets(0, 0, 5, 5);
 		gbc_indietro_btn.gridx = 0;
 		gbc_indietro_btn.gridy = 8;
 		panel.add(indietro_btn, gbc_indietro_btn);
+		
+		btnVisualizzaIDati = new JButton("Visualizza i dati");
+		GridBagConstraints gbc_btnVisualizzaIDati = new GridBagConstraints();
+		gbc_btnVisualizzaIDati.insets = new Insets(0, 0, 0, 5);
+		gbc_btnVisualizzaIDati.gridx = 0;
+		gbc_btnVisualizzaIDati.gridy = 9;
+		panel.add(btnVisualizzaIDati, gbc_btnVisualizzaIDati);
+		btnVisualizzaIDati.addActionListener(this);
 		
 		inserisci_btn = new JButton("Inserisci spiaggia");
 		inserisci_btn.addActionListener(this);
@@ -174,11 +187,33 @@ public class UISpiaggia extends JFrame implements ActionListener {
 			UI mainUI = new UI(this.connection,this.statement);
 			mainUI.setVisible(true);
 			this.setVisible(false);
+		}else if(arg0.getSource() == btnVisualizzaIDati){
+			try {
+			this.statement = this.connection.createStatement();
+			String querySelect = "SELECT * FROM spiaggia";
+			result = this.statement.executeQuery(querySelect);
+			List<Spiaggia> list = new ArrayList<>();
+			  
+			//INTERROGAZIONE SULLA TABELLA LISTINO		
+			while (result.next()){
+				list.add(new Spiaggia(Integer.parseInt(result.getString("ID")),
+				result.getString("Nome"), result.getString("Via"),result.getString("Citta"),result.getString("Informazioni")));
+
+			}
+			result_txtArea.setText("");
+			for (Spiaggia attuale : list){
+				result_txtArea.append(attuale.toString() + "\n");
+				spiagge.add(attuale.toString());
+			}
+			this.pack();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		else {
 			try{
-				JSONObject obj = new JSONObject();
-				JSONArray spiagge = new JSONArray();
 				obj.put("Autore", "Marco Sisca");
 				obj.put("Creato il", LocalDate.now());
 		
@@ -190,24 +225,16 @@ public class UISpiaggia extends JFrame implements ActionListener {
 
 				//INSERIMENTO NELLA TABELLA OMBRELLONE
 				String insertOnSpiaggia = String.format("INSERT INTO spiaggia VALUES (%s,'%s','%s','%s','%s')",s.getID(),
-	    																						s.getNome(),s.getVia(),s.getCitta(),s.getInformazioni());
+	    																										s.getNome(),
+	    																										s.getVia(),
+	    																										s.getCitta(),
+	    																										s.getInformazioni());
 				this.statement.executeUpdate(insertOnSpiaggia);
 				//INTERROGAZIONE SULLA TABELLA OMBRELLONE
 				this.statement = this.connection.createStatement();
 				String queryOnSpiaggia = "SELECT * FROM spiaggia";
 				result = this.statement.executeQuery(queryOnSpiaggia);
-				List<Spiaggia> list = new ArrayList<>();
-	  
-				while (result.next()){
-					list.add(new Spiaggia(Integer.parseInt(result.getString("ID")),
-					result.getString("Nome"), result.getString("Via"),result.getString("Citta"),result.getString("Informazioni")));
-
-				}
-				result_txtArea.setText("");
-				for (Spiaggia attuale : list){
-					result_txtArea.append(attuale.toString() + "\n");
-					spiagge.add(attuale.toString());
-				}
+				btnVisualizzaIDati.doClick();
 				obj.put("Spiagge", spiagge);
 				//SCRIVO I RISULTATI SU UN FILE
 				try (FileWriter file = new FileWriter("parsingSpiagge.txt")) {

@@ -1,17 +1,22 @@
 package view;
 
 import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.FileWriter;
@@ -19,9 +24,12 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+
 import model.Listino;
+
 import java.awt.Font;
 
 public class UIListino extends JFrame implements ActionListener{
@@ -48,13 +56,16 @@ public class UIListino extends JFrame implements ActionListener{
 	private JButton indietro_btn;
 	private JLabel lblNewLabel;
 	private JLabel label;
+	private JButton btnVisualizzaIDati;
+	private JSONObject obj = new JSONObject();
+	private JSONArray listini = new JSONArray();
 
 	
 	public UIListino(Connection connection, Statement statement) {
 		this.statement = statement;
 		this.connection = connection;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 552, 326);
+		setBounds(100, 100, 552, 401);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -64,9 +75,9 @@ public class UIListino extends JFrame implements ActionListener{
 		contentPane.add(labelPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_labelPanel = new GridBagLayout();
 		gbl_labelPanel.columnWidths = new int[]{105, 46, 0};
-		gbl_labelPanel.rowHeights = new int[]{14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_labelPanel.rowHeights = new int[]{14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_labelPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_labelPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_labelPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		labelPanel.setLayout(gbl_labelPanel);
 		
 		ID_lbl = new JLabel("ID");
@@ -213,10 +224,18 @@ public class UIListino extends JFrame implements ActionListener{
 		indietro_btn = new JButton("<-");
 		indietro_btn.addActionListener(this);
 		GridBagConstraints gbc_indietro_btn = new GridBagConstraints();
-		gbc_indietro_btn.insets = new Insets(0, 0, 0, 5);
+		gbc_indietro_btn.insets = new Insets(0, 0, 5, 5);
 		gbc_indietro_btn.gridx = 0;
 		gbc_indietro_btn.gridy = 11;
 		labelPanel.add(indietro_btn, gbc_indietro_btn);
+		
+		btnVisualizzaIDati = new JButton("Visualizza i dati");
+		GridBagConstraints gbc_btnVisualizzaIDati = new GridBagConstraints();
+		gbc_btnVisualizzaIDati.insets = new Insets(0, 0, 0, 5);
+		gbc_btnVisualizzaIDati.gridx = 0;
+		gbc_btnVisualizzaIDati.gridy = 12;
+		labelPanel.add(btnVisualizzaIDati, gbc_btnVisualizzaIDati);
+		btnVisualizzaIDati.addActionListener(this);
 		
 		listino_btn = new JButton("Inserisci Listino");
 		listino_btn.addActionListener(this); 
@@ -233,11 +252,38 @@ public class UIListino extends JFrame implements ActionListener{
 			UI mainUI = new UI(this.connection,this.statement);
 			this.setVisible(false);
 			mainUI.setVisible(true);	
+		} else if(arg0.getSource() == btnVisualizzaIDati){
+			try {
+			this.statement = this.connection.createStatement();
+			String querySelect = "SELECT * FROM listino";
+			result = this.statement.executeQuery(querySelect);
+			List<Listino> list = new ArrayList<>();
+			  
+			//INTERROGAZIONE SULLA TABELLA LISTINO		
+			while (result.next()){
+				//INSERISCO IN UNA LISTA TUTTE LE RIGHE RISULTATE DALLA QUERY - POTREI EVITARLO
+				list.add(new Listino(Integer.parseInt(result.getString("ID")), 
+						result.getString("Descrizione"), 
+						Integer.parseInt(result.getString("Durata")),
+						LocalDate.parse(result.getString("Dal")),
+						LocalDate.parse(result.getString("Al")),
+						Integer.parseInt(result.getString("Prezzo")),
+						Integer.parseInt(result.getString("ID_Spiaggia"))));
+			}
+			result_txtArea.setText("");
+			for (Listino attuale : list){
+				result_txtArea.append(attuale.toString() + "\n");
+				listini.add(attuale.toString());
+			}
+			this.pack();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		else {
 			try{
-			/*Dichiarazione oggetto json*/ JSONObject obj = new JSONObject();
-			/*Dichiarazione array json*/ 	JSONArray listino = new JSONArray();
 				Listino l = new Listino(Integer.parseInt(ID_txt.getText()), 
 											descrizione_txt.getText(), 
 											Integer.parseInt(durata_txt.getText()),
@@ -253,31 +299,11 @@ public class UIListino extends JFrame implements ActionListener{
 				    																						l.getPrezzo(),
 				    																						l.getIdSpiaggia());
 				this.statement.executeUpdate(insertOnListino);
-				//INTERROGAZIONE SULLA TABELLA LISTINO
-				this.statement = connection.createStatement();
-				String queryOnListino = "SELECT * FROM listino";
-				result = this.statement.executeQuery(queryOnListino);
-				List<Listino> list = new ArrayList<>();
-			
-				while (result.next()){
-					//INSERISCO IN UNA LISTA TUTTE LE RIGHE RISULTATE DALLA QUERY - POTREI EVITARLO
-					list.add(new Listino(Integer.parseInt(result.getString("ID")), 
-    						result.getString("Descrizione"), 
-    						Integer.parseInt(result.getString("Durata")),
-    						LocalDate.parse(result.getString("Dal")),
-    						LocalDate.parse(result.getString("Al")),
-    						Integer.parseInt(result.getString("Prezzo")),
-    						Integer.parseInt(result.getString("ID_Spiaggia"))));
-				}
-				result_txtArea.setText("");
-				for (Listino attuale : list){
-					result_txtArea.append(attuale.toString() + "\n");
-					listino.add(attuale.toString());
-				}
+				btnVisualizzaIDati.doClick();
 				obj.put("Nome", "Prova JSON");
 				obj.put("Creato da", "Marco Sisca");
 				obj.put("Creato il", LocalDate.now());
-				obj.put("Listini",listino);
+				obj.put("Listini",listini);
 			
 				//SCRIVO I RISULTATI SU UN FILE
 				try (FileWriter file = new FileWriter("parsingListino.txt")) {

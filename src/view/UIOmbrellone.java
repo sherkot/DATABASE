@@ -122,7 +122,7 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 		
 		result_txtArea = new JTextArea();
 		result_txtArea.setEditable(false);
-		result_txtArea.setForeground(Color.RED);
+		result_txtArea.setForeground(Color.BLACK);
 		GridBagConstraints gbc_result_txtArea = new GridBagConstraints();
 		gbc_result_txtArea.insets = new Insets(0, 0, 5, 0);
 		gbc_result_txtArea.gridx = 1;

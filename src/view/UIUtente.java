@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import model.Utente;
 
 import org.json.simple.JSONArray;
@@ -42,12 +43,15 @@ public class UIUtente extends JFrame implements ActionListener{
 	private Connection connection;
 	private ResultSet result;
 	private JTextArea result_txtArea;
+	private JButton btnVisualizzaIDati;
+	private /*Dichiarazione oggetto json*/ JSONObject obj = new JSONObject();
+	private /*Dichiarazione array json*/ 	JSONArray utenti = new JSONArray();
 
 	public UIUtente(Connection connection, Statement statement) {
 		this.connection = connection;
 		this.statement = statement;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 488, 381);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -57,9 +61,9 @@ public class UIUtente extends JFrame implements ActionListener{
 		contentPane.add(panel, BorderLayout.WEST);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{95, 367, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JLabel username_lbl = new JLabel("Username");
@@ -141,10 +145,18 @@ public class UIUtente extends JFrame implements ActionListener{
 		indietro_btn = new JButton("<-");
 		indietro_btn.addActionListener(this);
 		GridBagConstraints gbc_indietro_btn = new GridBagConstraints();
-		gbc_indietro_btn.insets = new Insets(0, 0, 0, 5);
+		gbc_indietro_btn.insets = new Insets(0, 0, 5, 5);
 		gbc_indietro_btn.gridx = 0;
 		gbc_indietro_btn.gridy = 7;
 		panel.add(indietro_btn, gbc_indietro_btn);
+		
+		btnVisualizzaIDati = new JButton("Visualizza i dati");
+		GridBagConstraints gbc_btnVisualizzaIDati = new GridBagConstraints();
+		gbc_btnVisualizzaIDati.insets = new Insets(0, 0, 0, 5);
+		gbc_btnVisualizzaIDati.gridx = 0;
+		gbc_btnVisualizzaIDati.gridy = 8;
+		panel.add(btnVisualizzaIDati, gbc_btnVisualizzaIDati);
+		btnVisualizzaIDati.addActionListener(this);
 		
 		inserisci_btn = new JButton("Inserisci utente");
 		inserisci_btn.addActionListener(this);
@@ -159,11 +171,36 @@ public class UIUtente extends JFrame implements ActionListener{
 			UI mainUI = new UI(this.connection,this.statement);
 			this.setVisible(false);
 			mainUI.setVisible(true);	
+		}else if(arg0.getSource() == btnVisualizzaIDati){
+			try {
+			this.statement = this.connection.createStatement();
+			String querySelect = "SELECT * FROM utente";
+			result = this.statement.executeQuery(querySelect);
+			List<Utente> list = new ArrayList<>();
+			  
+			//INTERROGAZIONE SULLA TABELLA LISTINO		
+			while (result.next()){
+				//INSERISCO IN UNA LISTA TUTTE LE RIGHE RISULTATE DALLA QUERY - POTREI EVITARLO
+				list.add(new Utente(result.getString("Username"), 
+						result.getString("Password"), 
+						result.getString("Nome"),
+						result.getString("Cognome"),
+						LocalDate.parse(result.getString("Data_Creazione"))));
+			}
+			result_txtArea.setText("");
+			for (Utente attuale : list){
+				result_txtArea.append(attuale.toString() + "\n");
+				utenti.add(attuale.toString());
+			}
+			this.pack();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		else {
 			try{
-			/*Dichiarazione oggetto json*/ JSONObject obj = new JSONObject();
-			/*Dichiarazione array json*/ 	JSONArray utenti = new JSONArray();
 			obj.put("Autore", "Marco Sisca");
 			obj.put("Creato il", LocalDate.now());
 				Utente u = new Utente(username_txt.getText(), 
@@ -183,21 +220,7 @@ public class UIUtente extends JFrame implements ActionListener{
 			    statement = connection.createStatement();
 			    String queryOnUtente = "SELECT * FROM utente";
 			    result = statement.executeQuery(queryOnUtente);
-			    List<Utente> list = new ArrayList<>();
-			
-				while (result.next()){
-					//INSERISCO IN UNA LISTA TUTTE LE RIGHE RISULTATE DALLA QUERY - POTREI EVITARLO
-					list.add(new Utente(result.getString("Username"), 
-    						result.getString("Password"), 
-    						result.getString("Nome"),
-    						result.getString("Cognome"),
-    						LocalDate.parse(result.getString("Data_Creazione"))));
-				}
-				result_txtArea.setText("");
-				for (Utente attuale : list){
-					result_txtArea.append(attuale.toString() + "\n");
-					utenti.add(attuale.toString());
-				}
+			    btnVisualizzaIDati.doClick();
 				obj.put("Utenti", utenti);
 				//SCRIVO I RISULTATI SU UN FILE
 				try (FileWriter file = new FileWriter("parsingUtenti.txt")) {

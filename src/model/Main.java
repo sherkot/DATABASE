@@ -15,7 +15,7 @@ public class Main {
 		try {
 			Properties p = new Properties();
 			//nel file di properties ci sono tutti i dati che servono per collegarmi al DB
-			p.load(new FileInputStream("C:\\Users\\marxs.94\\JAVA-MYSQL\\DATABASE\\src\\model\\cconfig.properties")); 
+			p.load(new FileInputStream(System.getProperty("user.dir") + "\\cconfig.properties")); 
 			String driver = p.getProperty("jdbcDriver");
 			Class.forName(driver);
 			String url = p.getProperty("jdbcUrl");
