@@ -280,7 +280,7 @@ public class UIListino extends JFrame implements ActionListener{
 				obj.put("Listini",listino);
 			
 				//SCRIVO I RISULTATI SU UN FILE
-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingListino.txt")) {
+				try (FileWriter file = new FileWriter("parsingListino.txt")) {
 					file.write(obj.toJSONString());
 				}
 				this.pack();

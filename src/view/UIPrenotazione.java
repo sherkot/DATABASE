@@ -287,7 +287,7 @@ public class UIPrenotazione extends JFrame implements ActionListener {
 				obj.put("Prenotazioni",prenotazioni);
 				
 				//SCRIVO I RISULTATI SU UN FILE
-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingPrenotazioni.txt")) {
+				try (FileWriter file = new FileWriter("parsingPrenotazioni.txt")) {
 					file.write(obj.toJSONString());
 				}
 				this.pack();

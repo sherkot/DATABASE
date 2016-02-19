@@ -30,6 +30,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import model.Ombrellone;
+import java.awt.Color;
 
 public class UIOmbrellone extends JFrame implements ActionListener {
 
@@ -44,13 +45,16 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 	private Statement statement;
 	private ResultSet result = null;
 	private JButton indietro_btn;
+	private JButton visualizza_btn;
+	private JSONObject obj = new JSONObject();
+	private JSONArray ombrelloni = new JSONArray();
 
 
 	public UIOmbrellone(Connection connection, Statement statement) {
 		this.connection = connection;
 		this.statement = statement;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 326);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -60,9 +64,9 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 		contentPane.add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{105, 46, 0};
-		gbl_panel.rowHeights = new int[]{14, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{14, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
 		JLabel numero_lbl = new JLabel("Numero");
@@ -117,6 +121,8 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 		idSpiaggia_txt.setColumns(10);
 		
 		result_txtArea = new JTextArea();
+		result_txtArea.setEditable(false);
+		result_txtArea.setForeground(Color.RED);
 		GridBagConstraints gbc_result_txtArea = new GridBagConstraints();
 		gbc_result_txtArea.insets = new Insets(0, 0, 5, 0);
 		gbc_result_txtArea.gridx = 1;
@@ -126,10 +132,18 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 		indietro_btn = new JButton("<-");
 		indietro_btn.addActionListener(this);
 		GridBagConstraints gbc_indietro_btn = new GridBagConstraints();
-		gbc_indietro_btn.insets = new Insets(0, 0, 0, 5);
+		gbc_indietro_btn.insets = new Insets(0, 0, 5, 5);
 		gbc_indietro_btn.gridx = 0;
 		gbc_indietro_btn.gridy = 7;
 		panel.add(indietro_btn, gbc_indietro_btn);
+		
+		visualizza_btn = new JButton("Visualizza tutti i dati");
+		visualizza_btn.addActionListener(this);
+		GridBagConstraints gbc_visualizza_btn = new GridBagConstraints();
+		gbc_visualizza_btn.insets = new Insets(0, 0, 0, 5);
+		gbc_visualizza_btn.gridx = 0;
+		gbc_visualizza_btn.gridy = 8;
+		panel.add(visualizza_btn, gbc_visualizza_btn);
 		
 		ombrellone_btn = new JButton("Inserisci Ombrellone");
 		ombrellone_btn.addActionListener(this);
@@ -144,50 +158,54 @@ public class UIOmbrellone extends JFrame implements ActionListener {
 			UI mainUI = new UI(this.connection,this.statement);
 			mainUI.setVisible(true);
 			this.setVisible(false);
-		}
-		else {
-			try{
-				JSONObject obj = new JSONObject();
-				JSONArray ombrelloni = new JSONArray();
-				obj.put("Autore", "Marco Sisca");
-				obj.put("Creato il", LocalDate.now());
-		
-				Ombrellone o = new Ombrellone(Integer.parseInt(numero_txt.getText()),
-										posizione_txt.getText(),
-										Integer.parseInt(idSpiaggia_txt.getText()));
-
-				//INSERIMENTO NELLA TABELLA OMBRELLONE
-				String insertOnOmbrellone = String.format("INSERT INTO ombrelloni VALUES (%s,'%s',%s)",o.getNumero(),
-	    																						o.getPosizione(),
-	    																						o.getIdSpiaggia());
-				this.statement.executeUpdate(insertOnOmbrellone);
-				//INTERROGAZIONE SULLA TABELLA OMBRELLONE
-				this.statement = this.connection.createStatement();
-				String queryOnOmbrellone = "SELECT * FROM ombrelloni";
-				result = this.statement.executeQuery(queryOnOmbrellone);
-				List<Ombrellone> list = new ArrayList<>();
-	  
-				while (result.next()){
-					list.add(new Ombrellone(Integer.parseInt(result.getString("Numero")),
-					result.getString("Posizione"),
-					Integer.parseInt(result.getString("ID_Spiaggia"))));
-				}
-				result_txtArea.setText("");
-				for (Ombrellone attuale : list){
-					result_txtArea.append(attuale.toString() + "\n");
-					ombrelloni.add(attuale.toString());
-				}
-				obj.put("Ombrelloni", ombrelloni);
-				//SCRIVO I RISULTATI SU UN FILE
-				try (FileWriter file = new FileWriter("C:\\Users\\marxs.94\\Desktop\\MARCO\\PROGETTI JAVA\\GRAND HOTEL AZZURRA\\parsingOmbrelloni.txt")) {
-					file.write(obj.toJSONString());
-				}
-				this.pack();
-			}  catch (SQLException e) {
+		} else if(arg0.getSource() == visualizza_btn){
+			try {
+			this.statement = this.connection.createStatement();
+			String querySelect = "SELECT * FROM ombrelloni";
+			result = this.statement.executeQuery(querySelect);
+			List<Ombrellone> list = new ArrayList<>();
+			  
+			while (result.next()){
+				list.add(new Ombrellone(Integer.parseInt(result.getString("Numero")),
+				result.getString("Posizione"),
+				Integer.parseInt(result.getString("ID_Spiaggia"))));
+			}
+			result_txtArea.setText("");
+			for (Ombrellone attuale : list){
+				result_txtArea.append(attuale.toString() + "\n");
+				ombrelloni.add(attuale.toString());
+			}
+			this.pack();
+			}catch (SQLException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 		}
+				else {
+					try{
+						obj.put("Autore", "Marco Sisca");
+						obj.put("Creato il", LocalDate.now());
+						Ombrellone o = new Ombrellone(Integer.parseInt(numero_txt.getText()),
+																		posizione_txt.getText(),
+																		Integer.parseInt(idSpiaggia_txt.getText()));
+						//INSERIMENTO NELLA TABELLA OMBRELLONE
+						String insertOnOmbrellone = String.format("INSERT INTO ombrelloni VALUES (%s,'%s',%s)",o.getNumero(),
+	    																										o.getPosizione(),
+	    																										o.getIdSpiaggia());
+						this.statement.executeUpdate(insertOnOmbrellone);
+						visualizza_btn.doClick();
+						obj.put("Ombrelloni", ombrelloni);
+						//SCRIVO I RISULTATI SU UN FILE
+						try (FileWriter file = new FileWriter("parsingOmbrelloni.txt")) {
+							file.write(obj.toJSONString());
+						}
+						this.pack();
+					}  catch (SQLException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}
 	}
 }
